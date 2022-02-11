@@ -1,4 +1,4 @@
-const { argv } = require("yargs");
+const { argv, string } = require("yargs");
 const yargs = require("yargs")
 
 
@@ -30,8 +30,21 @@ console.log(yargs.argv);
 yargs.command({
     command:"add",
     describe:"This is used to add new note",
-    handler:function(){
-        console.log("Add a new note");
+    builder:{
+        title:{
+            describe:"Note to be Added",
+            demandOption : true,
+            type:'string'
+        },
+        body:{
+            describe:"This is body",
+            demandOption:true,
+            type: 'string'
+        }
+    },
+    handler:function(argv){
+        console.log("Title is : " , argv.title );
+        console.log("body is : " , argv.body );
     }
 })
 
@@ -60,5 +73,5 @@ yargs.command({
 })
 
 
-
-console.log(yargs.argv);
+yargs.parse(); // parsing the objects 
+// console.log(yargs.argv);
