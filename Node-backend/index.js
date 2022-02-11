@@ -1,6 +1,6 @@
 const { argv, string } = require("yargs");
 const yargs = require("yargs")
-
+const notesArr = require('./notes') // notes is an object with 2 values
 
 const Greet = "Hello World";
 console.log(Greet);
@@ -45,14 +45,23 @@ yargs.command({
     handler:function(argv){
         console.log("Title is : " , argv.title );
         console.log("body is : " , argv.body );
+        notesArr.addNote(argv.title , argv.body);
     }
 })
 
 yargs.command({
     command:"remove",
     describe:"Remove a note",
-    handler: function(){
+    builder:{
+        title:{
+            describe:"Title to be deleted",
+            demandOption:true,
+            type:'string'
+        }
+    },
+    handler: function(argv){
         console.log("removing a note");
+        notesArr.removeNote(argv.title);
     }
 })
 
