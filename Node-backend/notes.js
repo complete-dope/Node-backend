@@ -48,14 +48,19 @@ const removeNote = function(title){
     if(differentNotes.length == 0) return console.log("size is zero");
     saveNote(differentNotes);
     
-    // if(duplicateNotes.length != 0){
-    //     fs.unlink('notes.json')
-    // }
+}
+const listnotes=()=>{
+    const notes = loadNotes();
+    notes.forEach((note)=>{
+        console.log(note);
+    })
+    // console.log(notes);
 }
 
 
 module.exports ={
     addNote :addNote, 
     getNote :getNote,
-    removeNote:removeNote
+    removeNote:removeNote,
+    listnotes:listnotes
 }

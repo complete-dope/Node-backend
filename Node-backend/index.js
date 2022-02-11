@@ -70,6 +70,8 @@ yargs.command({
     describe:"List a note",
     handler:function(){
         console.log("listing the note");
+        notesArr.listnotes();
+
     }
 })
 
