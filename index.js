@@ -1,3 +1,7 @@
+const { argv } = require("yargs");
+const yargs = require("yargs")
+
+
 const Greet = "Hello World";
 console.log(Greet);
 
@@ -19,3 +23,42 @@ if(input_val=="Elon"){
 else{
     console.log("Blue Origin");
 }
+
+console.log(yargs.argv);
+// this is just an updated way of parsing sent elements to the CLI and retrieving them 
+
+yargs.command({
+    command:"add",
+    describe:"This is used to add new note",
+    handler:function(){
+        console.log("Add a new note");
+    }
+})
+
+yargs.command({
+    command:"remove",
+    describe:"Remove a note",
+    handler: function(){
+        console.log("removing a note");
+    }
+})
+
+yargs.command({
+    command:"list",
+    describe:"List a note",
+    handler:function(){
+        console.log("listing the note");
+    }
+})
+
+yargs.command({
+    command:"read",
+    describe:"read a note",
+    handler:function(){
+        console.log("reading the note");
+    }
+})
+
+
+
+console.log(yargs.argv);
