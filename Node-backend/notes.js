@@ -7,10 +7,14 @@ const getNote = function(){
 const addNote = function(title , body){
     // fs.writeFileSync()
     const notes =loadNotes();
-    const duplicateNotes = notes.filter(function(note){
+    // const duplicateNotes = notes.filter(function(note){
+    //     return note.title === title
+    // });
+    const duplicateNote = notes.find((note)=>{
         return note.title === title
-    });
-    if(duplicateNotes.length == 0){
+    })
+    // if(duplicateNotes.length == 0){
+    if(!duplicateNote){
         notes.push({
             title:title,
             body:body
