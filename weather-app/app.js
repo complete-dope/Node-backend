@@ -8,9 +8,14 @@ request({url:url , json:true} , (error , response)=>{
     // const data = JSON.parse(response.body);
     // console.log("The current temp is " +data.current.temp_c);
     // console.log("The weather their is "+data.current.condition.text);
-    const data = response.body;
-    console.log("The current temp is " +data.current.temp_c);
-    console.log("The weather their is "+data.current.condition.text);
+    if(error){
+        console.log("Cant connect to api");
+    }else{
+        const data = response.body;
+        console.log("The current temp is " +data.current.temp_c);
+        console.log("The weather their is "+data.current.condition.text);
+    }
 })
 
+// if the api takes in coordinates we can change it to string input using the mapbox
 // body ke andar response hai sara
