@@ -84,5 +84,8 @@ yargs.command({
 })
 
 
-yargs.parse(); // parsing the objects 
+yargs.parse(); // parsing the objects always to be parsed
 // console.log(yargs.argv);
+
+// enter command to cli like 
+// node index.js add --title="elo" --body="body"
