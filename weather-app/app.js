@@ -1,7 +1,8 @@
 const request = require('request');
 // request version 2.88.0
-
-const url = "https://api.weatherapi.com/v1/current.json?key=4af4dda2afeb4dfab5d81100221202&q=Kerala&aqi=yes"
+const address = "Gurgaon"
+const url = "https://api.weatherapi.com/v1/current.json?key=4af4dda2afeb4dfab5d81100221202&q="+encodeURIComponent(address)+"&aqi=yes";
+// encode uri because is someone sends a special character the site will crash up but when encoded it can be handled
 
 request({url:url , json:true} , (error , response)=>{
     // json=true will automatically parse the json into object 
