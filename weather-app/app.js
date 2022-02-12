@@ -1,13 +1,12 @@
-console.log("starting");
+const request = require('request');
+// request version 2.88.0
 
-setTimeout(() => {
-    console.log("after 2 secs");
-}, 2000);
+const url = "https://api.weatherapi.com/v1/current.json?key=4af4dda2afeb4dfab5d81100221202&q=London&aqi=yes"
 
-setTimeout(()=>{
-    console.log("0 sec timer");
-},0)
+request({url:url} , (error , response)=>{
+    const data = JSON.parse(response.body);
+    console.log("The current temp is " +data.current.temp_c);
+    console.log("The weather their is "+data.current.condition.text);
+})
 
-console.log("stopping");
-// This is about the call stack and callback queue 
-// call stack takes the js functions in it and the functions like settimeout is a node api function and it goes in the callback queue whereas normal functions goes in the call stack and callback queue functions will always be called after the call stack function 
+// body ke andar response hai sara
