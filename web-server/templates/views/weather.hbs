@@ -31,7 +31,11 @@
 </head>
 <body>
     {{>header}}
-    <h2>The weather in {{address}} is {{forecast}} </h2>
+    <h2>The temperature in {{location}} is {{temp_c}}  °C </h2>
+    <h2>The Condition in {{location}} is {{condition}}</h2>
+    <h2>The humidity in {{location}} is {{humidity}}</h2>
+    <h2>The temp in {{location}} is {{temp_c}} °C  but it feels like {{feelslike_c}} °C </h2>
+    <h2>The air quality index is {{aqi}}</h2>
     {{>footer}}
 </body>
 </html>
