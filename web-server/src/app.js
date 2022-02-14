@@ -3,7 +3,6 @@ const express= require('express');//express is a function
 const res = require('express/lib/response');
 const hbs = require("hbs")
 const forecastList = require("./utils/forecast.js");
-const { log } = require('console');
 // we call it to create a new express server
 
 const app =express();
@@ -56,8 +55,8 @@ app.get('/weather' ,(req,res)=>{
         var humidity =response.body.current.humidity // this gives 32
         var feelslike_c = response.body.current.feelslike_c // feels like temp
         var aqi =response.body.current.air_quality.pm2_5 // this gives 107.45
-
         var temp_c = response.body.current.temp_c
+        
         res.render('weather',{
             temp_c:temp_c,
             location:req.query.address,
@@ -110,5 +109,5 @@ app.get('*',(req,res)=>{
 })
 
 app.listen(5000 ,()=>{
-    console.log("server is up");
+    console.log("server is up at port " + 5000);
 });
