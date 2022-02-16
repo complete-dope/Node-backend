@@ -12,7 +12,7 @@ console.log(__dirname);
 const viewsPath = path.join(__dirname  ,"../templates/views" )
 const publicDirectoryPath = path.join(__dirname , '../public')
 const partialsPath = path.join(__dirname , '../templates/partials')
-
+console.log(publicDirectoryPath);
 const request = require("request")
 
 function apilocation(location){
@@ -33,8 +33,12 @@ app.set('views' , viewsPath)
 hbs.registerPartials(partialsPath) //https://handlebarsjs.com/guide/partials.html#partial-parameters
 
 // app.use() customises server
-// setup static directory to serve
+// setup static directory to serve up files like css js images etc.
 app.use(express.static(publicDirectoryPath))//https://expressjs.com/en/starter/static-files.html
+// here you provided a static directory of public path
+//we can use localhost:5000/images/img6.jpg
+// also localhost:5000/css/styles.css
+
 
 // Routes
 app.get('/' ,(req,res)=>{
@@ -86,7 +90,7 @@ app.get('/products', (req,res)=>{
     }
     console.log(req.query.product)
     res.send("Request for query")
-    // http is a 2 way protocol a request is send and then a response is send back to us and this way we say it to be a 2 way connection only one time a req and one time a res is send back then aagain req and then res
+    // http is a 2 way protocol a request is send and then a response is send back to us and this way we say it to be a 2 way connection only one time a req and one time a res is send back then aagain req and then res . Their cant be a scenario where you can send 1 req and get in return 2 responses this will lead to error
     
 })
 
