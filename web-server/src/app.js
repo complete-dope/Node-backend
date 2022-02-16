@@ -5,7 +5,10 @@ const hbs = require("hbs")
 const forecastList = require("./utils/forecast.js");
 // we call it to create a new express server
 
-const app =express();
+const app =express(); // create a express app
+const port = process.env.PORT || 5000
+console.log(__dirname);
+// __dirname here would be the directory name till the inside  folder  like here it was "C:\Users\{name}\Desktop\web-server\src"
 const viewsPath = path.join(__dirname  ,"../templates/views" )
 const publicDirectoryPath = path.join(__dirname , '../public')
 const partialsPath = path.join(__dirname , '../templates/partials')
@@ -25,13 +28,13 @@ function apilocation(location){
 
 
 // app.set() 
-app.set('view engine','hbs')
-app.set('views' , viewsPath)
-hbs.registerPartials(partialsPath)
+app.set('view engine','hbs') //https://expressjs.com/en/guide/using-template-engines.html
+app.set('views' , viewsPath) 
+hbs.registerPartials(partialsPath) //https://handlebarsjs.com/guide/partials.html#partial-parameters
 
 // app.use() customises server
 // setup static directory to serve
-app.use(express.static(publicDirectoryPath))
+app.use(express.static(publicDirectoryPath))//https://expressjs.com/en/starter/static-files.html
 
 // Routes
 app.get('/' ,(req,res)=>{
@@ -108,6 +111,6 @@ app.get('*',(req,res)=>{
     })
 })
 
-app.listen(5000 ,()=>{
-    console.log("server is up at port " + 5000);
+app.listen(port ,()=>{
+    console.log("server is up at port " + port);
 });
