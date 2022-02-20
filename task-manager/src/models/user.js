@@ -32,7 +32,7 @@ const User = mongoose.model('User',{
     password:{
         type:String,
         trim:true,
-        minlenght:7,
+        minlength:7,
         validate(value){
             // if(value=="password" || value.length<6 ){
             //     throw new Error("You cant keep this as password")
