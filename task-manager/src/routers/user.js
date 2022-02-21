@@ -1,13 +1,13 @@
 const express = require("express")
 const router = new express.Router()
 
-const User = require('../models/user')
+const User = require('../models/user') // this loaded the schema and the middleware
 
 router.post('/users',async (req,res)=>{
     const user = new User(req.body)
 
     try {
-        await user.save()
+        await user.save() // before doing this it will check on middle ware if middleware has to say something before saving the user and in our case the middleware was indeed saying something
         res.status(201).send(user)
     } catch (error) {
         res.status(400).send('error'+error)
@@ -27,7 +27,7 @@ router.get('/users',async(req,res)=>{
 
 //for dynamic values in the url we do pass the name with a colon before it
 router.get('/users/:id',async(req,res)=>{
-    console.log(req.params);//it contains all the route parameters we have provided
+    //it contains all the route parameters we have provided
     const _id = req.params.id
     try {
         const user = await User.findById(_id);
@@ -47,7 +47,7 @@ router.patch('/users/:id',async(req,res)=>{
     const updates = Object.keys(req.body)//this returns a array of string where the key that the user was willing to attempt will be shown up 
     const allowedUpdate =['name','email','password','age']//to avoid a user to update critical things like id we need to pass up a array of array of things which the user can update and its not necessary that whatever is passed in the req.body can be updated by the user
 
-    //js every function
+    //js "every" function
     const isValidOperation =  updates.every((update)=>{
         return allowedUpdate.includes(update)
     }) // this will return true if all are found and false if even one of them is not found
@@ -56,7 +56,13 @@ router.patch('/users/:id',async(req,res)=>{
     const _id = req.params.id;
     //await usage will be where function is returning a promise 
     try {
-        const user = await User.findByIdAndUpdate(_id,req.body , {new:true , runValidators:true})
+        //this function will be able to change the password and also encrypt it afterwards
+        const user = await User.findById(_id)
+        updates.forEach((update)=>{
+            user[update] = req.body[update]
+        })
+        await user.save()
+        // const user = await User.findByIdAndUpdate(_id,req.body , {new:true , runValidators:true}) //this function just bypasses mongoose and also doesnt crypt password on updates even after we mentioned it in the models
         // no user
         if(!user){
             return res.status(200).send();

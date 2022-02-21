@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const { Schema } = mongoose;
+const bcrypt = require('bcryptjs')
 
-const User = mongoose.model('User',{
+const userSchema = new Schema({
     name:{
         type:String,
         required:true,
@@ -45,5 +47,18 @@ const User = mongoose.model('User',{
     }
 })
 
+userSchema.pre('save' , async function(next){
+    //this function will work before the save method is called
 
-module.exports =User
+    //here this says that i want to do something before db saves the user --> do "this" before saving him
+    const user = this
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password , 8) 
+    }
+    next() // this is called to get away with the middleware
+})
+
+const User = mongoose.model('User',userSchema)
+
+module.exports =User //https://mongoosejs.com/docs/models.html
+// WE are doing this to pass schemas successfully and therifore 
