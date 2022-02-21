@@ -54,6 +54,7 @@ router.patch('/users/:id',async(req,res)=>{
     
     if(!isValidOperation){ return res.status(400).send({error:"Invalid updates "})}
     const _id = req.params.id;
+    //await usage will be where function is returning a promise 
     try {
         const user = await User.findByIdAndUpdate(_id,req.body , {new:true , runValidators:true})
         // no user
