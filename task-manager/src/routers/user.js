@@ -1,14 +1,14 @@
 const express = require("express")
 const router = new express.Router()
-
 const User = require('../models/user') // this loaded the schema and the middleware
 
 router.post('/users',async (req,res)=>{
     const user = new User(req.body)
 
     try {
+        const token = await user.generateAuthToken()
         await user.save() // before doing this it will check on middle ware if middleware has to say something before saving the user and in our case the middleware was indeed saying something
-        res.status(201).send(user)
+        res.status(201).send({user , token})
     } catch (error) {
         res.status(400).send('error'+error)
     }
@@ -89,9 +89,12 @@ router.delete('/users/:id',async(req,res)=>{
 router.post('/users/login' , async(req,res)=>{
     try {
         const user = await User.findByCredentials(req.body.email , req.body.password)
-        res.send(user)
+        const token = await user.generateAuthToken()
+
+        res.send({user , token})
+        // res.send(user)
     } catch (error) {
-        res.status(404).send("Oops")
+        res.status(404).send("This request is not valid")
     }
 })
 
