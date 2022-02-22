@@ -1,7 +1,10 @@
 const express = require("express")
 const router = new express.Router()
+const auth  = require('../middleware/auth')
 const User = require('../models/user') // this loaded the schema and the middleware
 
+
+//Sign Up
 router.post('/users',async (req,res)=>{
     const user = new User(req.body)
 
@@ -14,7 +17,22 @@ router.post('/users',async (req,res)=>{
     }
 })
 
-router.get('/users',async(req,res)=>{
+
+//Login
+router.post('/users/login' , async(req,res)=>{
+    try {
+        const user = await User.findByCredentials(req.body.email , req.body.password)
+        const token = await user.generateAuthToken()
+
+        res.send({user , token})
+        // res.send(user)
+    } catch (error) {
+        res.status(404).send("This request is not valid")
+    }
+})
+
+// as in the real world application we dont want people to use up this route to get the details of all the people
+router.get('/users',auth,async(req,res)=>{
     //this is same as we have seen the mongodb find method and here mongoose also provides all of it and this is the only advantage of mongoose over mongodb
     try {
         const users = await User.find({});
@@ -22,7 +40,13 @@ router.get('/users',async(req,res)=>{
     } catch (error) {
         res.status(500).send();
     }
+})// Delete it Before deployment
+
+router.get('/users/me' , auth , async(res,req)=>{
+    res.send(req.user)
 })
+
+
 
 
 //for dynamic values in the url we do pass the name with a colon before it
@@ -86,17 +110,6 @@ router.delete('/users/:id',async(req,res)=>{
     }
 })
 
-router.post('/users/login' , async(req,res)=>{
-    try {
-        const user = await User.findByCredentials(req.body.email , req.body.password)
-        const token = await user.generateAuthToken()
-
-        res.send({user , token})
-        // res.send(user)
-    } catch (error) {
-        res.status(404).send("This request is not valid")
-    }
-})
 
 
 module.exports = router
