@@ -5,6 +5,24 @@ const taskRouter = require('./routers/task')
 const app = express();
 const port = process.env.PORT || 3000
 
+//Route handling here
+app.use((req,res , next)=>{
+    if(req.method === "GET"){
+        res.send("get request is disabled")
+    }else{
+        next()
+    }
+    console.log(req.method , req.path);
+    next()
+})//without using next the middleware would just get stuck in the between
+// Under maintaince
+app.use((req,res,next)=>{
+    if(req.method !== ""){
+        return res.status(503).send("Under Maintaince")
+    }
+    next()
+})
+
 //automatically parse the json to the object form 
 app.use(express.json());
 //Call for router , create a router similar to the way you called apis and register for a router
@@ -34,6 +52,3 @@ app.listen(port,()=>{
 // jWT is made up of 3 parts header , payload(data we provided) , signature(the string which we have provided up their act as a secret )
 // wrkflow is use jwt token to create a token for users and then use jwt verify to verify the user 
 
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjE0YzVjZWMzZTEzNWM1ZjEyMjY1NWYiLCJpYXQiOjE2NDU1Mjk3NTR9.XEhrpiJx-JezE91hm5nlwpKEFlI79f_M0-j9SFpnh-I
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjE0YzVjZWMzZTEzNWM1ZjEyMjY1NWYiLCJpYXQiOjE2NDU1Mjk4MjV9.UOOK_ARM9ckMkBDzk-UyRu5xsuBe0NN0Eg2Zb61-PUM
