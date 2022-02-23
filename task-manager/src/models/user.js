@@ -89,7 +89,7 @@ userSchema.pre('save' , async function(next){
     next() // this is called to get away with the middleware
 })
 
-const User = mongoose.model('User',userSchema)
+const User = mongoose.model('User',userSchema)//here the string defines the collection where the data will be stored and the collection name has some constrains that it cant be capital letters and will add "s" to it if its terminating with ~s and will add "es" if ending with 
 
 module.exports =User //https://mongoosejs.com/docs/models.html
 // WE are doing this to pass schemas successfully and therifore 

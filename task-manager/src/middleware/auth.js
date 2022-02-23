@@ -10,7 +10,8 @@ const auth = async(req,res,next)=>{
         if(!user){
             throw new Error()
         }
-        req.user = user // this line creates wonders as when the user get authenticate we are passing the user as a request header
+        req.token = token // 
+        req.user = user // these both line creates wonders as when the user get authenticate we are passing the user as a request header
         next()
         // console.log(decoded);
     } catch (error) {

@@ -30,9 +30,38 @@ router.post('/users/login' , async(req,res)=>{
         res.status(404).send("This request is not valid")
     }
 })
+//Logout --> from a particular device 
+router.post('/users/logout' , auth , async(req,res)=>{
+    try {
+        console.log("the req user is " , req.user);
+        console.log("the requser tokens were " , req.user.tokens);
+        req.user.tokens = req.user.tokens.filter((token)=>{
+            console.log("The token is " ,token);
+            var what = token.token !== req.token
+            console.log(what);
+            return what
+        })
+        await req.user.save()
+        res.send()
+    } catch (error) {
+        res.status(500).send("This is invalid token")
+    }
+})
+//logout from all devices
+router.post('/users/logoutAll' , auth , async(req,res)=>{
+    try {
+        req.user.tokens =[]
+        await req.user.save()
+        res.status(200).send("This is it ")
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
 
 // as in the real world application we dont want people to use up this route to get the details of all the people
-router.get('/users',auth,async(req,res)=>{
+router.get('/users',async(req,res)=>{
     //this is same as we have seen the mongodb find method and here mongoose also provides all of it and this is the only advantage of mongoose over mongodb
     try {
         const users = await User.find({});
@@ -109,6 +138,7 @@ router.delete('/users/:id',async(req,res)=>{
         res.status(400).send({error:"Invalid Id"})
     }
 })
+
 
 
 
