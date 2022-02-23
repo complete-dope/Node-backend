@@ -55,7 +55,18 @@ const userSchema = new Schema({
     }]//this will be an array
 })
 
-userSchema.methods.generateAuthToken = async function(){
+//To prevent sending private data back to the client we are using this function
+userSchema.methods.toJSON = function(){
+    const user = this
+    const userObject = user.toObject()
+    delete userObject.password
+    delete userObject.tokens
+    return userObject
+}
+
+
+
+userSchema.methods.generateAuthToken = async function(){ // methods means this thing will be changed over the particular user that we are calling it for and not over the whole "User" 
     const user = this
     const token = jwt.sign({ _id:user._id.toString() },"thisisanewupdate")
 
@@ -65,7 +76,7 @@ userSchema.methods.generateAuthToken = async function(){
 }
 
 
-userSchema.statics.findByCredentials = async(email,password)=>{
+userSchema.statics.findByCredentials = async(email,password)=>{ // statics means this thing will be changed over the whole of User 
     const user = await User.findOne({email})
     if(!user){
         throw new Error ("Unable to Login")

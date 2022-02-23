@@ -77,26 +77,11 @@ router.get('/users/me' , auth , async(res,req)=>{
 
 
 
-
-//for dynamic values in the url we do pass the name with a colon before it
-router.get('/users/:id',async(req,res)=>{
-    //it contains all the route parameters we have provided
-    const _id = req.params.id
-    try {
-        const user = await User.findById(_id);
-        if(!user){ return res.status(404)}
-        res.status(200).send(user)
-    } catch (error) {
-        res.status(404).send(error)
-    }
-    //this helps to find user by id 
-})
-
 //update the users
 // options: QueryOptions & { rawResult: true; } -->This is nothing just a indication that you need to pass the object as a parameter here . 
 
 //runvalidators is provided to us by the mongoose and it can be called only on update functions see doc https://mongoosejs.com/docs/validation.html#update-validators
-router.patch('/users/:id',async(req,res)=>{
+router.patch('/users/me',auth,async(req,res)=>{
     const updates = Object.keys(req.body)//this returns a array of string where the key that the user was willing to attempt will be shown up 
     const allowedUpdate =['name','email','password','age']//to avoid a user to update critical things like id we need to pass up a array of array of things which the user can update and its not necessary that whatever is passed in the req.body can be updated by the user
 
@@ -106,22 +91,16 @@ router.patch('/users/:id',async(req,res)=>{
     }) // this will return true if all are found and false if even one of them is not found
     
     if(!isValidOperation){ return res.status(400).send({error:"Invalid updates "})}
-    const _id = req.params.id;
     //await usage will be where function is returning a promise 
     try {
         //this function will be able to change the password and also encrypt it afterwards
-        const user = await User.findById(_id)
         updates.forEach((update)=>{
-            user[update] = req.body[update]
+            req.user[update] = req.body[update]
         })
-        await user.save()
+        await req.user.save()
         // const user = await User.findByIdAndUpdate(_id,req.body , {new:true , runValidators:true}) //this function just bypasses mongoose and also doesnt crypt password on updates even after we mentioned it in the models
-        // no user
-        if(!user){
-            return res.status(200).send();
-        }
         // updated successfully
-        res.status(200).send(user)
+        res.status(200).send(req.user)
 
     } catch (error) {
         //update unsuccessful
@@ -129,10 +108,11 @@ router.patch('/users/:id',async(req,res)=>{
     }
 })
 
-router.delete('/users/:id',async(req,res)=>{
+router.delete('/users/me',auth,async(req,res)=>{
     try {
-        const user = await User.findByIdAndDelete(req.params.id)
-        if(!user){ return res.status(404).send()}
+        // const user = await User.findByIdAndDelete(req.user._id)
+        // if(!user){ return res.status(404).send()}
+        await req.user.remove()
         res.status(200).send("deleted")
     } catch (error) {
         res.status(400).send({error:"Invalid Id"})
