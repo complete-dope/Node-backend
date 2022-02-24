@@ -53,7 +53,17 @@ const userSchema = new Schema({
             required:true
         }
     }]//this will be an array
+} ,{ 
+    timestamps:true // this will add a date field to it and 
 })
+
+//making a  virtual attribute
+userSchema.virtual('tasks' , {
+    ref:'Task',
+    localField:'_id',
+    foreignField:'owner'
+})
+
 
 //To prevent sending private data back to the client we are using this function
 userSchema.methods.toJSON = function(){

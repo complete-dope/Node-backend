@@ -30,6 +30,8 @@ router.post('/users/login' , async(req,res)=>{
         res.status(404).send("This request is not valid")
     }
 })
+
+
 //Logout --> from a particular device 
 router.post('/users/logout' , auth , async(req,res)=>{
     try {
