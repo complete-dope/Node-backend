@@ -2,7 +2,7 @@ const express = require("express")
 const router = new express.Router()
 const auth  = require('../middleware/auth')
 const User = require('../models/user') // this loaded the schema and the middleware
-
+const multer = require('multer')
 
 //Sign Up
 router.post('/users',async (req,res)=>{
@@ -118,6 +118,13 @@ router.delete('/users/me',auth,async(req,res)=>{
 })
 
 
+const upload =multer({
+    //this is options object
+    dest:'avatars'
+})
+router.post('/users/me/avatar' , upload.single('avatar') ,(req,res)=>{
+    res.send()
+} ) // as you are sending .. fieldname should be same as the form-data key as mentioned in either your form or in either of api call (very impt)
 
 
 module.exports = router

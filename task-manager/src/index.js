@@ -6,6 +6,14 @@ const taskRouter = require('./routers/task')
 const app = express();
 const port = process.env.PORT || 3000
 
+// const multer = require('multer')
+// const upload = multer({
+//     dest:'picture'
+// })
+// app.post('/upload' , upload.single('upload') , (req,res)=>{
+//     res.send()
+// })
+
 
 //automatically parse the json to the object form 
 app.use(express.json());
@@ -30,10 +38,4 @@ app.listen(port,()=>{
 // wrkflow is use jwt token to create a token for users and then use jwt verify to verify the user 
 //
 
-const jwt = require('jsonwebtoken')
-const token = jwt.sign({_id:"manu"},"newone")
-console.log("Token is "+token);
-const decode = jwt.verify(token , 'newone')
-console.log(decode);
-console.log("decoded string is "+decode._id);
 
