@@ -125,20 +125,13 @@ const upload =multer({
         fileSize:1000000
     },
     fileFilter(req,file ,cb){
-        // if(!file.originalname.endsWith('.pdf')){
-        //     return cb(new Error("Please upload a file"))
-        // }
-        if(!file.originalname.match(/\.(doc|docx)$/)){
-            return cb(new Error ('Please upload a word doc'))
+        if(!file.originalname.match(/.(jpg|jpeg|png)$/gm)){
+            cb(new Error ("The file has not been matched"))
         }
-        //using regular expressions
-
-        // file is a object here and we have all the properties mentioned in the docs under file
-        // cb(new Error ("file must be a PDF"))
         cb(undefined , true)
-        // cb(undefined , false)
-
     }
+
+
 })
 router.post('/users/me/avatar' , upload.single('avatar') ,(req,res)=>{
     res.send()
