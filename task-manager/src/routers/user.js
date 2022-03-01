@@ -120,7 +120,25 @@ router.delete('/users/me',auth,async(req,res)=>{
 
 const upload =multer({
     //this is options object
-    dest:'avatars'
+    dest:'avatars',
+    limits:{
+        fileSize:1000000
+    },
+    fileFilter(req,file ,cb){
+        // if(!file.originalname.endsWith('.pdf')){
+        //     return cb(new Error("Please upload a file"))
+        // }
+        if(!file.originalname.match(/\.(doc|docx)$/)){
+            return cb(new Error ('Please upload a word doc'))
+        }
+        //using regular expressions
+
+        // file is a object here and we have all the properties mentioned in the docs under file
+        // cb(new Error ("file must be a PDF"))
+        cb(undefined , true)
+        // cb(undefined , false)
+
+    }
 })
 router.post('/users/me/avatar' , upload.single('avatar') ,(req,res)=>{
     res.send()
