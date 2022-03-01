@@ -9,8 +9,8 @@ router.post('/users',async (req,res)=>{
     const user = new User(req.body)
 
     try {
-        const token = await user.generateAuthToken()
         await user.save() // before doing this it will check on middle ware if middleware has to say something before saving the user and in our case the middleware was indeed saying something
+        const token = await user.generateAuthToken()
         res.status(201).send({user , token})
     } catch (error) {
         res.status(400).send('error'+error)
@@ -35,18 +35,14 @@ router.post('/users/login' , async(req,res)=>{
 //Logout --> from a particular device 
 router.post('/users/logout' , auth , async(req,res)=>{
     try {
-        console.log("the req user is " , req.user);
-        console.log("the requser tokens were " , req.user.tokens);
-        req.user.tokens = req.user.tokens.filter((token)=>{
-            console.log("The token is " ,token);
-            var what = token.token !== req.token
-            console.log(what);
-            return what
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token
         })
         await req.user.save()
+
         res.send()
-    } catch (error) {
-        res.status(500).send("This is invalid token")
+    } catch (e) {
+        res.status(500).send()
     }
 })
 //logout from all devices
@@ -56,7 +52,7 @@ router.post('/users/logoutAll' , auth , async(req,res)=>{
         await req.user.save()
         res.status(200).send("This is it ")
     } catch (error) {
-        console.log(error);
+        res.status(500).send()
     }
 })
 
@@ -115,7 +111,7 @@ router.delete('/users/me',auth,async(req,res)=>{
         // const user = await User.findByIdAndDelete(req.user._id)
         // if(!user){ return res.status(404).send()}
         await req.user.remove()
-        res.status(200).send("deleted")
+        res.status(200).send("deleted" + req.user)
     } catch (error) {
         res.status(400).send({error:"Invalid Id"})
     }

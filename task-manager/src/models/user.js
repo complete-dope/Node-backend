@@ -3,6 +3,7 @@ const validator = require('validator')
 const { Schema } = mongoose;
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Task = require('./task')
 
 const userSchema = new Schema({
     name:{
@@ -25,8 +26,8 @@ const userSchema = new Schema({
     },
     age:{
         type:Number, // If passed a string this should be stored as Number in the database
-        //here we are providing custom validation
         default:0,
+        //here we are providing custom validation
         validate(value){
             if(value<0){
                 throw new Error("Age should be positive")
@@ -108,6 +109,13 @@ userSchema.pre('save' , async function(next){
         user.password = await bcrypt.hash(user.password , 8) 
     }
     next() // this is called to get away with the middleware
+})
+
+// Delete user tasks when user is removed
+userSchema.pre('remove', async function (next) {
+    const user = this
+    await Task.deleteMany({ owner: user._id })
+    next()
 })
 
 const User = mongoose.model('User',userSchema)//here the string defines the collection where the data will be stored and the collection name has some constrains that it cant be capital letters and will add "s" to it if its terminating with ~s and will add "es" if ending with 
