@@ -3,6 +3,7 @@ const router = new express.Router()
 const auth  = require('../middleware/auth')
 const User = require('../models/user') // this loaded the schema and the middleware
 const multer = require('multer')
+const res = require("express/lib/response")
 
 //Sign Up
 router.post('/users',async (req,res)=>{
@@ -125,18 +126,22 @@ const upload =multer({
         fileSize:1000000
     },
     fileFilter(req,file ,cb){
-        if(!file.originalname.match(/.(jpg|jpeg|png)$/gm)){
-            cb(new Error ("The file has not been matched"))
+        if(!file.originalname.match(/.(jpg|jpeg|png)$/)){
+            return cb(new Error ("Please upload a image"))
         }
         cb(undefined , true)
     }
 
 
+}) 
+// as you are sending .. fieldname should be same as the form-data key as mentioned in either your form or in either of api call (very impt)
+router.post('/users/me/avatar' , auth , upload.single('avatar') , async(req,res)=>{
+    req.user.avatar = req.file.buffer
+    await req.user.save()
+    res.send() 
+},(error , req,res,next)=>{
+    res.status(400).send({error:error.message})
 })
-router.post('/users/me/avatar' , upload.single('avatar') ,(req,res)=>{
-    res.send()
-} ) // as you are sending .. fieldname should be same as the form-data key as mentioned in either your form or in either of api call (very impt)
-
 
 module.exports = router
 
